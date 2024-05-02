@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	.jpg1{
+		 width: 35%;
+		  height: 55%;
+		z-index: 50;
+		 position: absolute; /* 添加绝对定位 */
+		 left: 40%;
+		 top: 50%;
+		 transform: translate(-50%, -50%);
+	}
+	.jpg{
+		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+		 width: 60%;
+		  height: 90%;
+		  position: absolute; /* 添加绝对定位 */
+		 left: 50%;
+		 top: 50%;
+		 transform: translate(-50%, -50%);
+	}
+	.backpage{
+
+		position: absolute; /* 添加绝对定位 */
+		top: 23%;
+		left: 60%;
+		opacity: 0.0;
+		transform: translate(-50%, -50%);
+	}
+</style>
+</head>
+<body>
+	<script>
+	function goBack() {
+	  window.history.back();
+	}
+	</script>
+
+			<img src="/img/sorry.png" alt="" class="jpg1">
+			<img src="/img/inu.jpg" alt="" class="jpg">
+			<a href="#" onclick="goBack()" class="backpage">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;<br>
+&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;<br>
+&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;<br>
+&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;<br>
+</a>
+
+
+
+</body>
+</html>

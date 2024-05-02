@@ -1,0 +1,320 @@
+﻿<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>社員管理</title>
+<style>
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.flex {
+    text-align: center;
+    /* div中の（aとform）ものを横並びにする */
+    display: flex;
+    /* それぞれを左端と右端に寄らすことができる */
+    justify-content: space-around;
+    /* 横幅が狭すぎるの場合、勝手に改行される */
+    flex-wrap: wrap;
+    /* 上下置中 */
+    align-items: center;
+}
+
+.title {
+    padding: 5px;
+    border-radius: 8px;
+    background-color: #808080;
+    border: dashed #bbb;
+    box-shadow: 0 0 0 4px #808080;
+}
+
+.btn {
+    display: block;
+	width: 80px;
+	height: 40px;
+	line-height: 20px;
+	text-align: center;
+	margin-left: 10px;
+	background: #338DC9;
+	color: white;
+	text-decoration: none;
+	border-radius: 10px;
+    font-size: larger;
+}
+
+.tb1 {
+    text-align: center;
+    border-collapse: collapse;
+    /* width: auto; */
+    width:100%;
+    word-break: break-word;
+   }
+   th {
+    padding: 10px;
+    background: #86a2bb;
+    border: solid 1.5px #302a27;
+    /* width: calc(100% - 30px); */
+   }
+   .tr {
+    padding: 10px;
+    border: solid 1.5px #302a27;
+   }
+   </style>
+<script>
+	function displayCurrentTime() {
+		var now = new Date();
+		var options = {
+			hour12 : false,
+			year : 'numeric',
+			month : '2-digit',
+			day : '2-digit',
+			hour : '2-digit',
+			minute : '2-digit',
+			second : '2-digit'
+		};
+		var year = now.toLocaleDateString(undefined, {
+			year : 'numeric'
+		});
+		var month = now.toLocaleDateString(undefined, {
+			month : '2-digit'
+		});
+		var day = now.toLocaleDateString(undefined, {
+			day : '2-digit'
+		});
+		var hour = now.toLocaleTimeString(undefined, {
+			hour : '2-digit',
+			hour12 : false
+		});
+		var minute = now.toLocaleTimeString(undefined, {
+			minute : '2-digit'
+		});
+		var second = now.toLocaleTimeString(undefined, {
+			second : '2-digit'
+		});
+		var currentTime = year + month + day + hour + minute + "分" + second
+				+ "秒";
+
+		var elements = document.getElementsByClassName("date-time");
+		for (var i = 0; i < elements.length; i++) {
+			elements[i].textContent = currentTime;
+		}
+	}
+
+	var timerId = setInterval(displayCurrentTime, 1000);
+	setTimeout(function() {
+		clearInterval(timerId);
+	}, 1000);
+</script>
+
+
+
+
+<!-- <link rel="stylesheet" href="style_kanri.css">-->
+<!-- <script>
+    function validateCheckbox() {
+      var checkbox1 = document.getElementById("checkbox1");
+      var checkbox2 = document.getElementById("checkbox2");
+
+      if (!checkbox1.checked && !checkbox2.checked) {
+        alert("在籍と非在籍がいずれにしても、１つのチェックが必須です。");
+        return false;
+      }
+
+      return true;
+    }
+  </script> -->
+
+
+
+</head>
+<body>
+	<header>
+		<h1 class="container">社内統合管理システム</h1>
+	</header>
+	<main>
+		<h2 class="title">&#x2660;社員管理</h2>
+
+		<dl>
+			<h3>&#x25A0;検索条件</h3>
+
+			<form action="/list" method="get" class="" id="new-user-form">
+				<table class="top">
+					<tr>
+						所属会社&nbsp;&nbsp;&nbsp;
+						<select name="Syozoku_kaisya" id="syozokuKaisyaSelect">
+							<option value="0">全て</option>
+							<option th:each="i : ${#numbers.sequence(1, 2)}" th:value="${i}"
+								th:text="${getAllSubject[i - 1]}"></option>
+						</select>
+					</tr>
+
+					<script th:inline="javascript">
+						// 获取服务器端传递的默认选中值
+						var defaultSyozokuKaisya = /*[[${intSyozoku_kaisya}]]*/0;
+
+						// 设置默认选中项
+						var selectElement = document
+								.getElementById('syozokuKaisyaSelect');
+						for (var i = 0; i < selectElement.options.length; i++) {
+							if (selectElement.options[i].value == defaultSyozokuKaisya) {
+								selectElement.options[i].selected = true;
+								break;
+							}
+						}
+					</script>
+
+
+
+
+					<tr>
+						<td><span class="mgr-10">社員名&nbsp;&nbsp;&nbsp;</span><input
+							type="text" th:value="${strSyinName}" class="name"
+							name="shainName"></td>
+					</tr>
+
+					<tr>
+						職業種類&nbsp;&nbsp;&nbsp;
+						<select name="Syokugyo_kind" id="syokugyoKindSelect">
+							<option th:each="i : ${#numbers.sequence(1, 6)}" th:value="${i}"
+								th:text="${getAllSubject[i + 17]}"></option>
+						</select>
+					</tr>
+
+					<script th:inline="javascript">
+						// 获取服务器端传递的默认选中值
+						var defaultSyokugyokind = /*[[${intSyokugyokind}]]*/0;
+
+						// 设置默认选中项
+						var selectElement = document
+								.getElementById('syokugyoKindSelect');
+						for (var i = 0; i < selectElement.options.length; i++) {
+							if (selectElement.options[i].value == defaultSyokugyokind) {
+								selectElement.options[i].selected = true;
+								break;
+							}
+						}
+					</script>
+
+
+
+
+					<tr>
+						<td>在籍<input value="1" type="checkbox" name="ZAISEKI"
+							th:checked="${intZaiseki == 1}"></td>
+						<td>非在籍<input value="1" type="checkbox" name="HIZAISEKI"
+							th:checked="${intHizaiseki == 1}"></td>
+					</tr>
+				</table>
+				<input type="submit" value="検&nbsp;索" class="btn">
+			</form>
+		</dl>
+	</main>
+	<h3>&#x25A0;社員一覧</h3>
+	<div class="h1">
+		登録日時：<span class="date-time"></span>
+	</div>
+	<div class="flex">
+
+		<a href="/getsubjectforSyinkiToroku">&plus;新規登録</a>
+	</div>
+
+
+	<span>件数：<span th:text="${#lists.size(ls)}"></span>件</span>
+	<table id="tb1" width="100%" border="1" cellspacing="1" cellpadding="4"
+		align="center">
+		<th class="aaa">所属会社</th>
+		<th class="bbb">社員名</th>
+		<th class="ccc">性別</th>
+		<th class="ddd">職業種類</th>
+		<th class="eee">入社日</th>
+		<th class="fff">退社日</th>
+		<th class="ggg">編集</th>
+
+<tr id="tr1" th:each="syain : ${ls}">
+    <td class="aaa">[[${syain.KAISHANAME}]]</td>
+    <td class="bbb">[[${syain.FIRST_NAME_KANJI}]]&emsp;[[${syain.LAST_NAME_KANJI}]]</td>
+    <td class="ccc">[[${syain.sname}]]</td>
+    <td class="ddd">[[${syain.GYOMUKIND}]]</td>
+    <td class="eee">
+        <script th:inline="javascript">
+            var dbDate = /*[[${syain.NYUUSYA_DATE}]]*/ ""; // yyyy-mm-dd 格式的日期
+            var dateObj = new Date(dbDate);
+            var formattedDate = dateObj.toLocaleDateString('zh-TW', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.write(formattedDate);
+        </script>
+    </td>
+    <td class="fff">
+      <script th:inline="javascript">
+            var dbTAISYA_DATE = /*[[${syain.TAISYA_DATE}]]*/ ""; // yyyy-mm-dd 格式的日期
+            var formattedTAISYA_DATE = "";
+
+            if (dbTAISYA_DATE !== "") {
+                var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+                if (datePattern.test(dbTAISYA_DATE)) {
+                    var TAISYA_DATEObj = new Date(dbTAISYA_DATE);
+                    formattedTAISYA_DATE = TAISYA_DATEObj.toLocaleDateString('zh-TW', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
+            }
+
+            document.write(formattedTAISYA_DATE);
+        </script>
+   </td>
+    <td class="ggg">
+        <a th:href="@{upd(syainId=${syain.SYAIN_ID})}" >更新</a><br>
+        <a th:href="@{del(syainId=${syain.SYAIN_ID},Syozoku_kaisya=${intSyozoku_kaisya}, shainName=${strSyinName}, Syokugyo_kind=${intSyokugyokind}, ZAISEKI=${intZaiseki}, HIZAISEKI=${intHizaiseki},page=${paging.page})}"
+           onClick="return confirm('以下の社員情報を削除しますか？\n社員名: ')">削除</a>
+    </td>
+</tr>
+
+
+
+
+
+
+
+
+	</table>
+
+<div class="textBox">
+		<p>
+    <a th:href="@{list(Syozoku_kaisya=${intSyozoku_kaisya}, shainName=${strSyinName}, Syokugyo_kind=${intSyokugyokind}, ZAISEKI=${intZaiseki}, HIZAISEKI=${intHizaiseki}, page=${paging.indexpage-1})}">&lt;&lt;</a>
+    <a th:href="@{list(Syozoku_kaisya=${intSyozoku_kaisya}, shainName=${strSyinName}, Syokugyo_kind=${intSyokugyokind}, ZAISEKI=${intZaiseki}, HIZAISEKI=${intHizaiseki}, page=${paging.page-1})}">&lt;</a>
+    <strong>第<span th:text="${paging.page+1}"></span>ページ/全<span th:text="${paging.pagenumber}"></span>ページ</strong>
+    <a th:href="@{list(Syozoku_kaisya=${intSyozoku_kaisya}, shainName=${strSyinName}, Syokugyo_kind=${intSyokugyokind}, ZAISEKI=${intZaiseki}, HIZAISEKI=${intHizaiseki}, page=${paging.page+1})}">&gt;</a>
+    <a th:href="@{list(Syozoku_kaisya=${intSyozoku_kaisya}, shainName=${strSyinName}, Syokugyo_kind=${intSyokugyokind}, ZAISEKI=${intZaiseki}, HIZAISEKI=${intHizaiseki}, page=${paging.pagenumber-1})}">&gt;&gt;</a>
+</p>
+		</div>
+
+
+
+
+
+
+
+
+</body>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	'use strict'
+	$('#new-user-form').submit(function(e) {
+
+		let roleChecked = $("input[type='checkbox']:checked").length;
+
+		if (!roleChecked) {
+			alert("在籍と非在籍がいずれにしても、１つのチェックが必須です。");
+			e.preventDefault();
+			return false;
+		}
+	});
+</script>
+
+</html>

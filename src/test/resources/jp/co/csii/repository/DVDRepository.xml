@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.csii.repository.DVDRepository">
+	<select id="findByName"
+		resultType="jp.co.csii.entity.DVDEntity">
+		SELECT * FROM dvdsystem WHERE dvdname
+		like '%${dvdname}%'
+	</select>
+	<select id="findById"
+			resultType="jp.co.csii.entity.DVDEntity">
+		SELECT * FROM dvdsystem WHERE dvdid = '${dvdId}'
+	</select>
+
+	<insert id="insertDVD"
+			parameterType="jp.co.csii.entity.DVDEntity">
+		INSERT INTO dvdsystem
+		VALUES ('0',
+		'${dvdname}', NULL,
+		'0',
+		'0',
+		CURRENT_TIMESTAMP,
+		'${ins_by}',
+		NULL,
+		NULL)
+	</insert>
+	<delete id="deletebyId" parameterType="int">
+		DELETE FROM
+		dvdsystem WHERE dvdid = '${dvdId}'
+	</delete>
+	<update id="borrowById"
+			parameterType="jp.co.csii.entity.DVDEntity">
+		UPDATE dvdsystem SET
+		borroweddate = #{borrowedDate},
+		status = '1',
+		borrowedcount = #{borrowedCount},
+		upd_dt = CURRENT_TIMESTAMP,
+		upd_by = 'shop'
+		where dvdid= #{dvdId}
+	</update>
+	<update id="backById"
+			parameterType="int">
+		UPDATE dvdsystem SET
+		borroweddate = NULL,
+		status = '0',
+		upd_dt = CURRENT_TIMESTAMP,
+		upd_by = 'shop'
+		where dvdid= #{dvdId}
+	</update>
+</mapper>

@@ -1,0 +1,88 @@
+﻿<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>DVD削除</title>
+    <script>
+        function displayCurrentTime() {
+            var now = new Date();
+            var options = {
+                hour12: false,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            var year = now.toLocaleDateString(undefined, { year: 'numeric' });
+            var month = now.toLocaleDateString(undefined, { month: '2-digit' });
+            var day = now.toLocaleDateString(undefined, { day: '2-digit' });
+            var hour = now.toLocaleTimeString(undefined, { hour: '2-digit', hour12: false });
+            var minute = now.toLocaleTimeString(undefined, { minute: '2-digit' });
+            var second = now.toLocaleTimeString(undefined, { second: '2-digit' });
+            var currentTime = year + month + day + hour + minute + "分" + second + "秒";
+
+            var elements = document.getElementsByClassName("date-time");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].textContent = currentTime;
+            }
+        }
+
+        var timerId = setInterval(displayCurrentTime, 1000);
+        setTimeout(function() {
+            clearInterval(timerId);
+        }, 1000);
+    </script>
+
+
+    <link rel="stylesheet" href="style_shinki.css">
+    <style>
+    </style>
+</head>
+<body>
+<head>
+    <h1 class="container">DVD統合管理システム</h1>
+    <p class="chan"><a href="/getsubject">DVD管理画面へ</a></p>
+</head>
+<div class="h1">
+    登録日時：<span class="date-time"></span>
+</div>
+<main>
+    <h2>
+        <h2 class="title">&#x2660;DVD削除</h2>
+    </h2>
+</main>
+<h2 class="kihon">基本情報 <a href="/SyainKanri_new_batch.html" class="iit"> 一括入力</a></h2>
+
+
+<form action="/del" method="get" onsubmit="return validateInput();">
+    <table>
+        <tr>
+            <td>DVD番号&nbsp;&nbsp;&nbsp;<input type="text" name="dvdId"><label
+                    class="require"></label></td>
+
+        </tr>
+        <script>
+            function validateInput() {
+                var dvdId = document.getElementsByName("dvdId")[0].value;
+
+                // 使用正则表达式检查输入是否为整数
+                var regex = /^\d+$/;
+                if (!regex.test(dvdId)) {
+                    // 输入不是整数，弹出警告窗口
+                    alert("請輸入整數");
+                    return false; // 阻止表单提交
+                }
+
+                return true; // 允许表单提交
+            }
+        </script>
+
+    </table>
+    <input type="submit" class="done" width="50" height="20" value="削除">
+</form>
+<p class="line"></p>
+
+
+</body>
+</html>

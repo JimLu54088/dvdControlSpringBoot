@@ -1,0 +1,58 @@
+@charset "utf-8";
+
+/* 共通で使う部分 */
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.flex {
+    text-align: center;
+    /* div中の（aとform）ものを横並びにする */
+    display: flex;
+    /* それぞれを左端と右端に寄らすことができる */
+    justify-content: space-around;
+    /* 横幅が狭すぎるの場合、勝手に改行される */
+    flex-wrap: wrap;
+    /* 上下置中 */
+    align-items: center;
+}
+
+.title {
+    padding: 5px;
+    border-radius: 8px;
+    background-color: #808080;
+    border: dashed #bbb;
+    box-shadow: 0 0 0 4px #808080;
+}
+
+.btn {
+    display: block;
+	width: 50px;
+	height: 30px;
+	line-height: 20px;
+	text-align: center;
+	margin-left: auto;
+	background: #338DC9;
+	color: white;
+	text-decoration: none;
+	border-radius: 10px;
+}
+
+table {
+    text-align: center;
+    border-collapse: collapse;
+    /* width: auto; */
+    width:100%;
+    word-break: break-word;
+   }
+   th {
+    padding: 10px;
+    background: #86a2bb;
+    border: solid 1.5px #302a27;
+    /* width: calc(100% - 30px); */
+   }
+   td {
+    padding: 10px;
+    border: solid 1.5px #302a27;
+   }

@@ -1,0 +1,177 @@
+﻿<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>社員管理</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .flex {
+            text-align: center;
+            /* div中の（aとform）ものを横並びにする */
+            display: flex;
+            /* それぞれを左端と右端に寄らすことができる */
+            justify-content: space-around;
+            /* 横幅が狭すぎるの場合、勝手に改行される */
+            flex-wrap: wrap;
+            /* 上下置中 */
+            align-items: center;
+        }
+
+        .title {
+            padding: 5px;
+            border-radius: 8px;
+            background-color: #808080;
+            border: dashed #bbb;
+            box-shadow: 0 0 0 4px #808080;
+        }
+
+        .btn {
+            display: block;
+            width: 80px;
+            height: 40px;
+            line-height: 20px;
+            text-align: center;
+            margin-left: 10px;
+            background: #338DC9;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: larger;
+        }
+
+        .tb1 {
+            text-align: center;
+            border-collapse: collapse;
+            /* width: auto; */
+            width:100%;
+            word-break: break-word;
+           }
+           th {
+            padding: 10px;
+            background: #86a2bb;
+            border: solid 1.5px #302a27;
+            /* width: calc(100% - 30px); */
+           }
+           .tr {
+            padding: 10px;
+            border: solid 1.5px #302a27;
+           }
+    </style>
+    <script>
+        function displayCurrentTime() {
+            var now = new Date();
+            var options = {
+                hour12 : false,
+                year : 'numeric',
+                month : '2-digit',
+                day : '2-digit',
+                hour : '2-digit',
+                minute : '2-digit',
+                second : '2-digit'
+            };
+            var year = now.toLocaleDateString(undefined, {
+                year : 'numeric'
+            });
+            var month = now.toLocaleDateString(undefined, {
+                month : '2-digit'
+            });
+            var day = now.toLocaleDateString(undefined, {
+                day : '2-digit'
+            });
+            var hour = now.toLocaleTimeString(undefined, {
+                hour : '2-digit',
+                hour12 : false
+            });
+            var minute = now.toLocaleTimeString(undefined, {
+                minute : '2-digit'
+            });
+            var second = now.toLocaleTimeString(undefined, {
+                second : '2-digit'
+            });
+            var currentTime = year + month + day + hour + minute + "分" + second
+                    + "秒";
+
+            var elements = document.getElementsByClassName("date-time");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].textContent = currentTime;
+            }
+        }
+
+        var timerId = setInterval(displayCurrentTime, 1000);
+        setTimeout(function() {
+            clearInterval(timerId);
+        }, 1000);
+    </script>
+
+</head>
+<body>
+<header>
+    <h1 class="container">DVD統合管理システム</h1>
+
+</header>
+<main>
+    <h2 class="title">&#x2660;DVD管理</h2>
+
+    <dl>
+        <h3>&#x25A0;検索条件</h3>
+
+        <form action="/list" method="get" class="" id="new-user-form">
+            <table class="top">
+
+                <tr>
+                    <td><span class="mgr-10">DVD名&nbsp;&nbsp;&nbsp;</span><input
+                            type="text" class="name"
+                            name="dvdname"></td>
+                </tr>
+            </table>
+            <input type="submit" value="検&nbsp;索" class="btn">
+        </form>
+    </dl>
+</main>
+<h3>&#x25A0;DVD一覧</h3>
+<div class="h1">
+    登録日時：<span class="date-time"></span>
+</div>
+<div class="flex">
+
+    <a href="/checkifdatafull">&plus;新規登録</a>
+    <a href="/checkdeleteCondition">&plus;DVD削除</a>
+	<!-- 显示额外的文本 -->
+
+    <p th:text="${additionalTextForAdding}" style="color: red; font-size: 20px;"></p>
+</div>
+
+
+<span>件数：<span th:text="${#lists.size(ls)}"></span>件</span>
+<table id="tb1" width="100%" border="1" cellspacing="1" cellpadding="4"
+       align="center">
+    <th class="aaa">DVD番号</th>
+    <th class="bbb">DVD名</th>
+    <th class="ccc">貸出日</th>
+    <th class="ddd">貸出回数</th>
+    <th class="eee">貸し出し/戻し</th>
+    <th class="fff">状態(0:在庫/1:貸し出し中)</th>
+    <th class="ggg">編集</th>
+
+    <tr id="tr1" th:each="dvd : ${ls}">
+        <td class="aaa">[[${dvd.dvdId}]]</td>
+		<td class="bbb">[[${dvd.dvdname}]]</td>
+		<td class="ccc">[[${dvd.borrowedDate}]]</td>
+		<td class="ddd">[[${dvd.borrowedCount}]]</td>
+        <td class="eee">
+            <a th:href="@{borrow(dvdId=${dvd.dvdId})}" >貸し出し</a><br>
+            <a th:href="@{back(dvdId=${dvd.dvdId})}" >戻し</a><br>
+        </td>
+        <td class="fff">[[${dvd.status}]]</td>
+
+
+
+
+</table>
+
+</body>
+
+</html>
