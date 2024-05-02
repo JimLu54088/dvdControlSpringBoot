@@ -297,7 +297,7 @@ public class DVDController {
 			Period period = Period.between(borrowedDate, today);
 
 // 获取天数差异
-			int daysDifference = period.getDays();
+			int daysDifference = period.getDays() + 1;
 
 			List<DVDEntity> ls = dVDService.findByName("");
 
